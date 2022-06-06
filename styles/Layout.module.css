@@ -1,0 +1,41 @@
+.Layout footer {
+  text-align: center;
+}
+
+.Layout .navbar {
+  background-color: '#203040';
+}
+.Layout .navbar {
+  background-color: '#203040';
+}
+
+.Layout .navbar a {
+  color: '#ffffff';
+  margin-left: 10px;
+}
+
+.Layout .main {
+  min-height: 80vh,
+}
+
+.Layout footer {
+  text-align: center;
+}
+
+.Layout .main-link {
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.Layout .grow {
+  width: 30%;
+}
+
+.Layout .links {
+  display: flex;
+}
+
+.Layout .navbarButton {
+  color: #ffffff;
+  text-transform: initial;
+}
