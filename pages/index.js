@@ -25,10 +25,6 @@ const Home = (props) => {
     console.log(cellValues.row);
   };
 
-  const submitHandler = (event, cellValues) => {
-    console.log(cellValues);
-  };
-
   const employeesData = props.employees ? props.employees : mockData;
 
   return (
@@ -45,8 +41,7 @@ const Home = (props) => {
       </Box>
       <TabPanel value={value} index={0} style={{ padding: '0.5rem 0' }}>
         <CalculateWageForm
-          data={employeesData}
-          onSubmit={submitHandler}
+          data={mockData}
         />
       </TabPanel>
       <TabPanel value={value} index={1} style={{ padding: '0.5rem 0' }}>
@@ -65,6 +60,7 @@ const Home = (props) => {
 
 export async function getServerSideProps() {
   try {
+    
     console.log("------> GET data from DB");
     const result = await executeQuery({
       query: GET_ALL_EMPLOYEES_QUERY,

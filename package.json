@@ -18,9 +18,12 @@
     "axios": "^0.27.2",
     "install": "^0.13.0",
     "next": "12.1.6",
+    "next-connect": "^0.12.2",
     "npm": "^8.12.1",
     "react": "18.1.0",
-    "react-dom": "18.1.0"
+    "react-dom": "18.1.0",
+    "react-hook-form": "^7.31.3",
+    "serverless-mysql": "^1.5.4"
   },
   "devDependencies": {
     "eslint": "8.16.0",
