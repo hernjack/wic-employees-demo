@@ -3,17 +3,19 @@ import {
   Box,
   Tabs,
   Tab,
-  Button,
 } from '@mui/material';
 import Layout from '../components/Layout'
-import { DataGrid } from '@mui/x-data-grid';
 import TabPanel from '../components/TabPanel';
-import data from '../utils/data';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import EditIcon from '@mui/icons-material/Edit';
+import mockData from '../utils/data';
+import EmployeeTable from '../components/EmployeeTable';
+import CalculateWageForm from '../components/CalculateWageForm';
+import executeQuery from '../utils/db';
+import { GET_ALL_EMPLOYEES_QUERY } from '../utils/queries';
+import { fromRawDataToEmployees } from '../utils/translators';
 
-export default function Home() {
-  const [value, setValue] = React.useState(0);
+
+const Home = (props) => {
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -23,61 +25,60 @@ export default function Home() {
     console.log(cellValues.row);
   };
 
-  const rows = data;
+  const submitHandler = (event, cellValues) => {
+    console.log(cellValues);
+  };
 
-  const columns = [
-    { field: 'employeeId', headerName: 'Id', width: 150 },
-    { field: 'employeeName', headerName: 'Name', width: 150 },
-    { field: 'ratePerHour', headerName: 'Rate per Hour', width: 150 },
-    { field: 'Actions', width: 225,
-      renderCell: (cellValues) => {
-        return(
-          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-            <Button
-              variant="contained"
-              color="primary"
-              endIcon={<EditIcon />}
-              onClick={(event) => {
-                handleClick(event, cellValues);
-              }}
-            >
-              Edit
-            </Button>
-            <Button
-              variant="contained"
-              color="error"
-              endIcon={<DeleteForeverIcon />}
-              onClick={(event) => {
-                handleClick(event, cellValues);
-              }}
-            >
-              Delete 
-            </Button>
-          </div>
-        )
-      },
-    }
-  ];
-  
+  const employeesData = props.employees ? props.employees : mockData;
+
   return (
-    <Layout>
+
+    <Layout
+      title="WIC Employees"
+      description="WIC Employees"
+    >
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="tabs menu">
-          <Tab label="Employees List"  />
-          <Tab label="Add Employee" />
+          <Tab label="Calculate Wage" />
+          <Tab label="Employees List" />
         </Tabs>
       </Box>
-      <TabPanel value={value}  index={0}>
-        <div style={{ height: 500, width: '100%' }}>
-          <DataGrid 
-            getRowId={(row) => row.employeeId} 
-            rows={rows} 
-            columns={columns} 
-          />
-        </div>
+      <TabPanel value={value} index={0} style={{ padding: '0.5rem 0' }}>
+        <CalculateWageForm
+          data={employeesData}
+          onSubmit={submitHandler}
+        />
       </TabPanel>
-      <TabPanel value={value}  index={1}>
+      <TabPanel value={value} index={1} style={{ padding: '0.5rem 0' }}>
+        <EmployeeTable
+          data={employeesData}
+          onEdit={handleClick}
+          onAdd={handleClick}
+          onDelete={handleClick}
+        />  
+      </TabPanel>
+      <TabPanel value={value} index={1}>
       </TabPanel>
     </Layout>
   )
 }
+
+export async function getServerSideProps() {
+  try {
+    console.log("------> GET data from DB");
+    const result = await executeQuery({
+      query: GET_ALL_EMPLOYEES_QUERY,
+    });
+    console.log("GET EMPLOYEES RAW DATA: ", result);
+    const employees = fromRawDataToEmployees(result).map(_ => _.getInfo());
+    return {
+      props: {
+        employees,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export default Home;
