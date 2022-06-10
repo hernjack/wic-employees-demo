@@ -12,17 +12,45 @@ import CalculateWageForm from '../components/CalculateWageForm';
 import executeQuery from '../utils/db';
 import { GET_ALL_EMPLOYEES_QUERY } from '../utils/queries';
 import { fromRawDataToEmployees } from '../utils/translators';
+import EmployeeForm from '../components/EmployeeForm';
+import axios from 'axios';
 
 
 const Home = (props) => {
   const [value, setValue] = useState(0);
+  const [open, setOpen] = React.useState(false);
+  const [selectedEmployee, setSelectedEmployee] = React.useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const handleClick = (event, cellValues) => {
-    console.log(cellValues.row);
+  const handleAdd = (event) => {
+    setSelectedEmployee(null)
+    setOpen(true)
+  };
+
+  const handleEdit = (event, cellValues) => {
+    if (!cellValues.row) return
+
+    setSelectedEmployee(cellValues.row)
+    setOpen(true)
+  };
+
+  const handleDelete = (event, cellValues) => {
+    if (!cellValues.row.employeeId) return
+
+    return axios.delete(`/api/employees/${cellValues.row.employeeId}`)
+      .then((response) => {
+        console.log(response)
+        onClose();
+        reset({})
+      })
+      .catch((e) => { console.log(e) })
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   const employeesData = props.employees ? props.employees : mockData;
@@ -47,20 +75,24 @@ const Home = (props) => {
       <TabPanel value={value} index={1} style={{ padding: '0.5rem 0' }}>
         <EmployeeTable
           data={employeesData}
-          onEdit={handleClick}
-          onAdd={handleClick}
-          onDelete={handleClick}
-        />  
+          onAdd={handleAdd}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
       </TabPanel>
       <TabPanel value={value} index={1}>
       </TabPanel>
+      <EmployeeForm
+        employee={selectedEmployee}
+        isOpen={open}
+        onClose={handleClose}
+      />
     </Layout>
   )
 }
 
 export async function getServerSideProps() {
   try {
-    
     console.log("------> GET data from DB");
     const result = await executeQuery({
       query: GET_ALL_EMPLOYEES_QUERY,
@@ -74,6 +106,12 @@ export async function getServerSideProps() {
     };
   } catch (error) {
     console.log(error);
+    const employees = fromRawDataToEmployees(mockData).map(_ => _.getInfo());
+    return {
+      props: {
+        employees,
+      },
+    };;
   }
 }
 

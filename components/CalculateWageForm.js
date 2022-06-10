@@ -26,16 +26,7 @@ const CalculateWageForm = ({ data }) => {
     const employees = fromRawDataToEmployees(data) || [];
     const employee = employees.find((_) => _.employeeId === Number(employeeId))
     setEmployee(employee)
-
-    // let data = { employeeId, hoursPerWeek };
-    // axios.post('/api/employees', data)
-    //   .then((response) => {
-    //     console.log(response)
-    //   })
-    //   .catch((e) => { console.log(e) }
-    //   )
   }
-
 
   return (
     <div style={{ height: 500, width: '100%', margin: '0.5rem' }}>

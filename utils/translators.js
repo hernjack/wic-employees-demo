@@ -30,6 +30,18 @@ const fromRawDataToEmployees = (data) => {
   return data.map((_) => fromRawDataToEmployee(_))
 }
 
+const getEmployeeMapFromFormData = (formData) => {
+  return {
+    name: formData?.name || null,
+    ratePerHour: formData?.ratePerHour || null,
+    registration: formData?.registrationNumber || null,
+    expireDate: formData?.expireDate || null,
+    employeeType: formData?.employeeType || null,
+  }
+}
+
 export {
-  fromRawDataToEmployees
+  fromRawDataToEmployee,
+  fromRawDataToEmployees,
+  getEmployeeMapFromFormData
 }

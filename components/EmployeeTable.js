@@ -6,7 +6,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 
-const EmployeeTable = ({ data, onEdit, onDelete }) => {
+const EmployeeTable = ({ data, onAdd, onEdit, onDelete }) => {
 
   const rows = data|| []
 
@@ -61,9 +61,7 @@ const EmployeeTable = ({ data, onEdit, onDelete }) => {
         variant="contained"
         color="success"
         endIcon={<EditIcon />}
-        onClick={(event) => {
-          onAdd(event, cellValues);
-        }}
+        onClick={onAdd}
       >
         Add Employee
       </Button>

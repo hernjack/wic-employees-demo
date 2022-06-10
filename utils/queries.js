@@ -33,15 +33,17 @@ const GET_EMPLOYEE_BY_ID_QUERY = `
   WHERE E.idEmployee = <id>;
 `
 
-// set location id = 1 by default
-const POST_NEW_EMPLOYEE = ` 
-  INSERT into Employee 
-   (name, ratePerHour, expireDate, registrationNumber, Employee_Type_idEmployee_Type, Branch_idBranch) values 
-   (<name>, <ratePerHour>, <expireDate>, <registrationNumber>, <employee_type>, 1);
-`
+const NEW_EMPLOYEE_QUERY = `INSERT INTO Employee (name, ratePerHour, expireDate, registrationNumber, Employee_Type_idEmployee_Type, Branch_idBranch) VALUES `
+
+//TODO
+const UPDATE_EMPLOYEE_QUERY = `UPDATE Employee SET`
+
+const DELETE_EMPLOYEE_QUERY = `DELETE FROM Employee WHERE idEmployee = ?`;
 
 export {
   GET_ALL_EMPLOYEES_QUERY,
   GET_EMPLOYEE_BY_ID_QUERY,
-  POST_NEW_EMPLOYEE
+  NEW_EMPLOYEE_QUERY,
+  UPDATE_EMPLOYEE_QUERY,
+  DELETE_EMPLOYEE_QUERY,
 }
